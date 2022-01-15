@@ -11,7 +11,7 @@ class Brain:
         self.player_1 = "Player 1"
         self.player_2 = "Player 2"
         # Coordinates with symbols in them
-        self.already_played = []
+        self.already_played = {}
 
     def player_counts(self):
         """
@@ -89,7 +89,7 @@ class Brain:
                 symbols.pop(symbols.index(cpu_symbol))
                 # Player 1 gets the value left in the list of symbols
                 player_symbol = symbols[0]
-                # Prints symbols assigned to CPU and player
+                # Prints the symbols assigned to CPU and player
                 print(f"{first_player} is {cpu_symbol}, {second_player} is {player_symbol}\n")
                 # Returns outcome of chosen symbols
                 return cpu_symbol, player_symbol
@@ -153,7 +153,7 @@ class Brain:
                     print("That's not a valid coordinate.")
                 else:
                     play_choice = coordinate_choice
-                    self.already_played.append(play_choice)
+                    self.already_played[coordinate_choice] = current_player
 
                     graphics.update_box(play_choice, players[current_player])
 
@@ -161,4 +161,74 @@ class Brain:
 
                     turn += 1
 
+                    # Check if someone has won
+                    if turn >= 5:
+                        self.find_winner(self.already_played, current_player)
+
                     invalid_choice = True
+
+    def find_winner(self, all_played_symbols, current_player):
+
+        try:
+            if all_played_symbols[1] == current_player and all_played_symbols[2] == current_player and \
+                    all_played_symbols[3] == current_player:
+                print(f"{current_player} Wins!")
+                exit()
+        except KeyError:
+            pass
+
+        try:
+            if all_played_symbols[4] == current_player and all_played_symbols[5] == current_player and \
+                    all_played_symbols[6] == current_player:
+                print(f"{current_player} Wins!")
+                exit()
+        except KeyError:
+            pass
+
+        try:
+            if all_played_symbols[7] == current_player and all_played_symbols[8] == current_player and \
+                    all_played_symbols[9] == current_player:
+                print(f"{current_player} Wins!")
+                exit()
+        except KeyError:
+            pass
+
+        try:
+            if all_played_symbols[1] == current_player and all_played_symbols[4] == current_player and \
+                    all_played_symbols[7] == current_player:
+                print(f"{current_player} Wins!")
+                exit()
+        except KeyError:
+            pass
+
+        try:
+            if all_played_symbols[2] == current_player and all_played_symbols[5] == current_player and \
+                    all_played_symbols[8] == current_player:
+                print(f"{current_player} Wins!")
+                exit()
+        except KeyError:
+            pass
+
+        try:
+            if all_played_symbols[3] == current_player and all_played_symbols[6] == current_player and \
+                    all_played_symbols[9] == current_player:
+                print(f"{current_player} Wins!")
+                exit()
+        except KeyError:
+            pass
+
+        try:
+            if all_played_symbols[1] == current_player and all_played_symbols[5] == current_player and \
+                    all_played_symbols[9] == current_player:
+                print(f"{current_player} Wins!")
+                exit()
+        except KeyError:
+            pass
+
+        try:
+            if all_played_symbols[3] == current_player and all_played_symbols[5] == current_player and \
+                    all_played_symbols[7] == current_player:
+                print(f"{current_player} Wins!")
+                exit()
+        except KeyError:
+            pass

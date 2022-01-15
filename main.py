@@ -18,6 +18,7 @@ graphics.draw_box()
 
 ####
 # TODO 1. FIGURE OUT HOW TO FIND WINNER, LOSER, AND TIE
+# IT FUCKING WORKS (optimze code later though)
 ####
 
 # TODO 2. GUI
