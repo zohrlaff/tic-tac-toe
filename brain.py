@@ -146,9 +146,18 @@ class Brain:
 
             while not invalid_choice:
                 try:
-                    coordinate_choice = int(input(f"{current_player}, choose a coordinate:    "))
-                    if coordinate_choice < 1 or coordinate_choice > 9:
-                        raise ValueError
+                    if current_player == "CPU":
+                        valid_cpu_choice = False
+                        while not valid_cpu_choice:
+                            cpu_choice = random.choice(range(1, 10))
+                            if cpu_choice not in list(self.already_played.keys()):
+                                print(f"CPU chose: {cpu_choice}")
+                                coordinate_choice = cpu_choice
+                                valid_cpu_choice = True
+                    else:
+                        coordinate_choice = int(input(f"{current_player}, choose a coordinate:    "))
+                        if coordinate_choice < 1 or coordinate_choice > 9:
+                            raise ValueError
                 except ValueError:
                     print("That's not a valid coordinate.")
                 else:
@@ -159,11 +168,16 @@ class Brain:
 
                     graphics.draw_box()
 
-                    turn += 1
-
                     # Check if someone has won
-                    if turn >= 5:
-                        self.find_winner(self.already_played, current_player)
+                    if turn >= 9:
+                        print("No one WINS. Tie.")
+                        play_game = False
+                    elif turn >= 5:
+                        winner = self.find_winner(self.already_played, current_player)
+                        if winner:
+                            play_game = False
+
+                    turn += 1
 
                     invalid_choice = True
 
@@ -172,63 +186,63 @@ class Brain:
         try:
             if all_played_symbols[1] == current_player and all_played_symbols[2] == current_player and \
                     all_played_symbols[3] == current_player:
-                print(f"{current_player} Wins!")
-                exit()
+                print(f"{current_player} WINS!\n")
+                return True
         except KeyError:
             pass
 
         try:
             if all_played_symbols[4] == current_player and all_played_symbols[5] == current_player and \
                     all_played_symbols[6] == current_player:
-                print(f"{current_player} Wins!")
-                exit()
+                print(f"{current_player} WINS!\n")
+                return True
         except KeyError:
             pass
 
         try:
             if all_played_symbols[7] == current_player and all_played_symbols[8] == current_player and \
                     all_played_symbols[9] == current_player:
-                print(f"{current_player} Wins!")
-                exit()
+                print(f"{current_player} WINS!\n")
+                return True
         except KeyError:
             pass
 
         try:
             if all_played_symbols[1] == current_player and all_played_symbols[4] == current_player and \
                     all_played_symbols[7] == current_player:
-                print(f"{current_player} Wins!")
-                exit()
+                print(f"{current_player} WINS!\n")
+                return True
         except KeyError:
             pass
 
         try:
             if all_played_symbols[2] == current_player and all_played_symbols[5] == current_player and \
                     all_played_symbols[8] == current_player:
-                print(f"{current_player} Wins!")
-                exit()
+                print(f"{current_player} WINS!\n")
+                return True
         except KeyError:
             pass
 
         try:
             if all_played_symbols[3] == current_player and all_played_symbols[6] == current_player and \
                     all_played_symbols[9] == current_player:
-                print(f"{current_player} Wins!")
-                exit()
+                print(f"{current_player} WINS!\n")
+                return True
         except KeyError:
             pass
 
         try:
             if all_played_symbols[1] == current_player and all_played_symbols[5] == current_player and \
                     all_played_symbols[9] == current_player:
-                print(f"{current_player} Wins!")
-                exit()
+                print(f"{current_player} WINS!\n")
+                return True
         except KeyError:
             pass
 
         try:
             if all_played_symbols[3] == current_player and all_played_symbols[5] == current_player and \
                     all_played_symbols[7] == current_player:
-                print(f"{current_player} Wins!")
-                exit()
+                print(f"{current_player} WINS!\n")
+                return True
         except KeyError:
             pass

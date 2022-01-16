@@ -10,17 +10,22 @@ print(graphics.title, "\nChoose a coordinate number to fill the tic-tac-toe in w
 
 # Brain Class does heavy lifting. It handles counting players, choosing symbols, and taking turns
 cpu = Brain()
+
 # Once 1 or 2 players are chosen (.player_counts()), the first turn will commence
-cpu.first_turn(cpu.player_counts())
+game_on = True
+while game_on:
+    cpu.first_turn(cpu.player_counts())
 
-# Draw tictactoe box with coordinates
-graphics.draw_box()
+    try:
+        restart_game = input("Play again? Y or N:    \n").upper()
+        if restart_game not in ["Y", "N"]:
+            raise ValueError
+    except ValueError:
+        print("Choose between X or O only.")
+    else:
+        if restart_game == "Y":
+            game_on = True
+        else:
+            game_on = False
 
-####
-# TODO 1. FIGURE OUT HOW TO FIND WINNER, LOSER, AND TIE
-# IT FUCKING WORKS (optimze code later though)
-####
-
-# TODO 2. GUI
-# TODO 3. Program CPU 'player'
 # TODO 4. Refactor

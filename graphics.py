@@ -13,7 +13,7 @@ class Graphix:
 '''
         self.tictactoe_display = f"\n   |   | X \n" \
                                  "---|---|---\n" \
-                                 f"   | X |   \n" \
+                                 f"   | O |   \n" \
                                  "---|---|---\n" \
                                  f" X |   |   \n\n"
         self.p = [position for position in range(1, 10)]
