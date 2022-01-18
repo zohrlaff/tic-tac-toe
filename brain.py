@@ -120,9 +120,10 @@ class Brain:
 
     def player_battle(self, players):
         """
-        INCOMPLETE
-        :param players:
-        :return:
+        Executes the actual game of tic-tac-toe with error checking. Checks the order of players and lets them
+        continually choose coordinates until a winner is found or the game ends in tie. Provides 'CPU' functionality
+        for single player games.
+        :param players: Dictionary with order of players and their chosen symbols
         """
 
         print(f"It's time to play!")
@@ -133,12 +134,13 @@ class Brain:
         for player in players.keys():
             player_order.append(player)
 
-        play_game = True
         # Turn counter to facilitate symbol display
         turn = 1
+        play_game = True
         while play_game:
             invalid_choice = False
 
+            # Turn taking mechanism
             if turn % 2 != 0:
                 current_player = player_order[0]
             else:
@@ -146,14 +148,17 @@ class Brain:
 
             while not invalid_choice:
                 try:
+                    # If game is single player, allow the 'CPU' to choose coordinates
                     if current_player == "CPU":
                         valid_cpu_choice = False
                         while not valid_cpu_choice:
+                            # 'CPU' will choose a coordinate that isn't in the list of already chosen coordinates
                             cpu_choice = random.choice(range(1, 10))
                             if cpu_choice not in list(self.already_played.keys()):
                                 print(f"CPU chose: {cpu_choice}")
                                 coordinate_choice = cpu_choice
                                 valid_cpu_choice = True
+                    # Two player coordinate choice and error checking
                     else:
                         coordinate_choice = int(input(f"{current_player}, choose a coordinate:    "))
                         if coordinate_choice < 1 or coordinate_choice > 9:
@@ -164,11 +169,11 @@ class Brain:
                     play_choice = coordinate_choice
                     self.already_played[coordinate_choice] = current_player
 
+                    # Update tic-tac-toe on-screen graphics
                     graphics.update_box(play_choice, players[current_player])
-
                     graphics.draw_box()
 
-                    # Check if someone has won
+                    # Check if someone has won or the game is tied
                     if turn >= 9:
                         print("No one WINS. Tie.")
                         play_game = False
@@ -182,6 +187,13 @@ class Brain:
                     invalid_choice = True
 
     def find_winner(self, all_played_symbols, current_player):
+        """
+        Finds winner of the game. Checks if one of the two players has fulfilled one of the eights ways of winning
+        the game.
+
+        :param all_played_symbols: List of coordinates that have already been chosen by players
+        :param current_player: Name of the player currently choosing a coordinate
+        """
 
         try:
             if all_played_symbols[1] == current_player and all_played_symbols[2] == current_player and \

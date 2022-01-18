@@ -28,4 +28,4 @@ while game_on:
         else:
             game_on = False
 
-# TODO 4. Refactor
+# TODO 1. Refactor
