@@ -1,4 +1,6 @@
 import random
+import time
+
 from graphics import Graphix
 
 graphics = Graphix()
@@ -10,10 +12,10 @@ class Brain:
         self.CPU = "CPU"
         self.player_1 = "Player 1"
         self.player_2 = "Player 2"
-        # Coordinates with symbols in them
+        # Coordinates and the symbols in them
         self.already_played = {}
 
-    def player_counts(self):
+    def player_count(self):
         """
         Inquires the user with how many players will play the game.
         Only 1 or 2 players can be chosen.
@@ -39,31 +41,36 @@ class Brain:
         leftover symbol.
         :param player_count: Takes an integer type object holding the amount of players in a game
         """
+
+        # Reset graphic coordinates to starting position
+        graphics.set_box()
+
         against_cpu = [self.CPU, self.player_1]
         two_players = [self.player_1, self.player_2]
 
         match player_count:
             case 1:
                 # Randomly choose first player
-                who_starts = random.choice(against_cpu)
+                first_player = random.choice(against_cpu)
                 # Remove name of player who starts from list of players
-                against_cpu.pop(against_cpu.index(who_starts))
+                against_cpu.pop(against_cpu.index(first_player))
                 # Assign name of second player with the value left in list of players
                 second_player = against_cpu[0]
-                print(f"{who_starts} will go first.\n")
+                time.sleep(1)
+                print(f"\n{first_player} will go first.\n")
                 # Run choose_symbol method to let players choose their symbol, then, assign outcome to player_symbols
-                player_symbols = self.choose_symbol(who_starts, second_player)
+                player_symbols = self.choose_symbol(first_player, second_player)
                 # This dictionary will store the player order and their chosen symbol
-                player_order = {who_starts: player_symbols[0], second_player: player_symbols[1]}
+                player_order = {first_player: player_symbols[0], second_player: player_symbols[1]}
                 # player_battle method begins the actual PvP game
                 self.player_battle(player_order)
             case 2:
-                who_starts = random.choice(two_players)
-                two_players.pop(two_players.index(who_starts))
+                first_player = random.choice(two_players)
+                two_players.pop(two_players.index(first_player))
                 second_player = two_players[0]
-                print(f"{who_starts} will go first.\n")
-                player_symbols = self.choose_symbol(who_starts, second_player)
-                player_order = {who_starts: player_symbols[0], second_player: player_symbols[1]}
+                print(f"{first_player} will go first.\n")
+                player_symbols = self.choose_symbol(first_player, second_player)
+                player_order = {first_player: player_symbols[0], second_player: player_symbols[1]}
                 self.player_battle(player_order)
 
     def choose_symbol(self, first_player: str, second_player: str):
@@ -76,8 +83,6 @@ class Brain:
         :param second_player: string type object that holds the name of the player who got the second turn
         :return: string type object with symbols chosen by players
         """
-        # Error handling loop helper
-        symbol_error = False
         # Available symbols
         symbols = ["X", "O"]
 
@@ -90,14 +95,16 @@ class Brain:
                 # Player 1 gets the value left in the list of symbols
                 player_symbol = symbols[0]
                 # Prints the symbols assigned to CPU and player
+                time.sleep(1)
                 print(f"{first_player} is {cpu_symbol}, {second_player} is {player_symbol}\n")
                 # Returns outcome of chosen symbols
                 return cpu_symbol, player_symbol
             case _:
                 # Error handling loop
+                symbol_error = False
                 while not symbol_error:
                     try:
-                        # Let first player choose their symbol and capitalise
+                        # Let first player choose their symbol
                         symbol_choice = input(f"{first_player}, X or O?:    ").upper()
                         # Checks if value chosen is valid
                         if symbol_choice not in symbols:
@@ -109,12 +116,14 @@ class Brain:
                         match first_player_choice:
                             case "X":
                                 # Print symbol outcome
-                                print(f"{second_player}, you are O\n")
+                                time.sleep(1)
+                                print(f"\n{second_player}, you are O\n")
                                 # Returns outcome of chosen symbols
                                 return "X", "O"
                             case "O":
                                 # Print symbol outcome
-                                print(f"{second_player}, you are X\n")
+                                time.sleep(1)
+                                print(f"\n{second_player}, you are X\n")
                                 # Returns outcome of chosen symbols
                                 return "O", "X"
 
@@ -125,9 +134,10 @@ class Brain:
         for single player games.
         :param players: Dictionary with order of players and their chosen symbols
         """
-
+        time.sleep(1)
         print(f"It's time to play!")
         graphics.draw_box()
+        time.sleep(1)
 
         # Player info unpacking
         player_order = []
@@ -138,14 +148,13 @@ class Brain:
         turn = 1
         play_game = True
         while play_game:
-            invalid_choice = False
-
             # Turn taking mechanism
             if turn % 2 != 0:
                 current_player = player_order[0]
             else:
                 current_player = player_order[1]
 
+            invalid_choice = False
             while not invalid_choice:
                 try:
                     # If game is single player, allow the 'CPU' to choose coordinates
@@ -156,11 +165,13 @@ class Brain:
                             cpu_choice = random.choice(range(1, 10))
                             if cpu_choice not in list(self.already_played.keys()):
                                 print(f"CPU chose: {cpu_choice}")
+                                time.sleep(.5)
                                 coordinate_choice = cpu_choice
                                 valid_cpu_choice = True
                     # Two player coordinate choice and error checking
                     else:
                         coordinate_choice = int(input(f"{current_player}, choose a coordinate:    "))
+                        time.sleep(.5)
                         if coordinate_choice < 1 or coordinate_choice > 9:
                             raise ValueError
                 except ValueError:
@@ -170,7 +181,7 @@ class Brain:
                     self.already_played[coordinate_choice] = current_player
 
                     # Update tic-tac-toe on-screen graphics
-                    graphics.update_box(play_choice, players[current_player])
+                    graphics.update_box(play_choice - 1, players[current_player])
                     graphics.draw_box()
 
                     # Check if someone has won or the game is tied
@@ -178,8 +189,7 @@ class Brain:
                         print("No one WINS. Tie.")
                         play_game = False
                     elif turn >= 5:
-                        winner = self.find_winner(self.already_played, current_player)
-                        if winner:
+                        if self.find_winner(self.already_played, current_player):
                             play_game = False
 
                     turn += 1
