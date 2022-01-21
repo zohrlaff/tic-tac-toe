@@ -31,5 +31,3 @@ while game_on:
             game_on = True
         else:
             game_on = False
-
-# TODO 1. Fix time() stuff
